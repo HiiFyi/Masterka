@@ -65,6 +65,7 @@ async def gen_links(fwd_msg: Message, shortener: bool = True) -> Dict[str, str]:
     f_hash = get_hash(fwd_msg)
     slink = f"{base_url}/watch/{f_hash}{fid}/{enc_fname}"
     olink = f"{base_url}/{f_hash}{fid}/{enc_fname}"
+    get_file_link = f"{bot_username}/?start={fid}"
     
     if shortener and getattr(Var, "SHORTEN_MEDIA_LINKS", False):
         try:
@@ -80,7 +81,7 @@ async def gen_links(fwd_msg: Message, shortener: bool = True) -> Dict[str, str]:
         except Exception as e:
             logger.error(f"Error during link shortening: {e}")
     
-    return {"stream_link": slink, "online_link": olink, "media_name": m_name, "media_size": m_size_hr}
+    return {"stream_link": slink, "online_link": olink, "get_file": get_file_link, "media_name": m_name, "media_size": m_size_hr}
 
 
 async def gen_dc_txt(usr: User) -> str:
@@ -108,3 +109,4 @@ async def is_admin(cli: Client, chat_id_val: int) -> bool:
 
 async def reply(msg: Message, **kwargs):
     return await handle_flood_wait(msg.reply_text, **kwargs, quote=True, disable_web_page_preview=True)
+
