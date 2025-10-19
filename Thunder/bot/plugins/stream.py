@@ -51,7 +51,8 @@ async def fwd_media(m_msg: Message) -> Optional[Message]:
 def get_link_buttons(links):
     return InlineKeyboardMarkup([[
         InlineKeyboardButton(MSG_BUTTON_STREAM_NOW, url=links['stream_link']),
-        InlineKeyboardButton(MSG_BUTTON_DOWNLOAD, url=links['online_link'])
+        InlineKeyboardButton(MSG_BUTTON_DOWNLOAD, url=links['online_link']),
+        
     ]])
 
 async def validate_request_common(client: Client, message: Message) -> Optional[bool]:
@@ -71,7 +72,8 @@ async def send_channel_links(target_msg: Message, links: Dict[str, Any], source_
             source_info=source_info,
             id_=source_id,
             online_link=links['online_link'],
-            stream_link=links['stream_link']
+            stream_link=links['stream_link'],
+            get_file=links['get_file']
         ),
         disable_web_page_preview=True,
         quote=True
@@ -105,7 +107,8 @@ async def send_dm_links(bot: Client, user_id: int, links: Dict[str, Any], chat_t
                       file_name=links['media_name'],
                       file_size=links['media_size'],
                       download_link=links['online_link'],
-                      stream_link=links['stream_link']
+                      stream_link=links['stream_link'],
+                      get_file=links['get_file']
                   )
         await handle_flood_wait(
             bot.send_message,
@@ -126,7 +129,8 @@ async def send_link(msg: Message, links: Dict[str, Any]):
             file_name=links['media_name'],
             file_size=links['media_size'],
             download_link=links['online_link'],
-            stream_link=links['stream_link']
+            stream_link=links['stream_link'],
+            get_file=links['get_file']
         ),
         quote=True,
         parse_mode=enums.ParseMode.MARKDOWN,
@@ -260,7 +264,8 @@ async def channel_receive_handler(bot: Client, msg: Message):
                             source_info=source_info,
                             id_=message.chat.id,
                             online_link=links['online_link'],
-                            stream_link=links['stream_link']
+                            stream_link=links['stream_link'],
+                            get_file=links['get_file']
                         ),
                         disable_web_page_preview=True
                     )
@@ -317,7 +322,8 @@ async def process_single(
                     file_name=links['media_name'],
                     file_size=links['media_size'],
                     download_link=links['online_link'],
-                    stream_link=links['stream_link']
+                    stream_link=links['stream_link'],
+                    get_file=links['get_file']
                 ),
                 parse_mode=enums.ParseMode.MARKDOWN,
                 disable_web_page_preview=True,
@@ -345,7 +351,8 @@ async def process_single(
                     source_info=source_info,
                     id_=source_id,
                     online_link=links['online_link'],
-                    stream_link=links['stream_link']
+                    stream_link=links['stream_link'],
+                    get_file=links['get_file']
                 ),
                 disable_web_page_preview=True,
                 quote=True
@@ -454,3 +461,4 @@ async def process_batch(
     )
     if notification_msg:
         await safe_delete_message(notification_msg)
+
